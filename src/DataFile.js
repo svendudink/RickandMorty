@@ -1,18 +1,5 @@
-import "./App.css";
-import FlipImage from "./Elements/FlipImage";
-import DataFile from "./DataFile";
-import "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-bootstrap";
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-  crossorigin="anonymous"
-/>;
-
-function App() {
-  let rickObj = {
+const DataFile = () => {
+  const rickObj = {
     info: {
       count: 826,
       pages: 42,
@@ -658,24 +645,6 @@ function App() {
       },
     ],
   };
+};
 
-  return (
-    <div>
-      <div className="pics">
-        {rickObj.results.map((js, index) => {
-          return (
-            <FlipImage
-              name={js.name}
-              image={js.image}
-              status={js.status}
-              species={js.species}
-              itemNr={index}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-export default App;
+export default DataFile;
