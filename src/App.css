@@ -1,6 +1,14 @@
 .pics {
-  background-color: rgb(52, 194, 194);
+  background-color: rgb(29, 223, 126);
   display: grid;
+  grid-template-rows: 1fr, 1fr, 1fr;
   grid-template-columns: 1fr, 1fr, 1fr;
-  grid-template-rows: auto, auto, auto;
+}
+
+.flex-Container {
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
 }
