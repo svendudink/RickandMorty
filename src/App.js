@@ -15,7 +15,7 @@ import { useState } from "react";
 let rickOne = {
   results: [
     {
-      id: 1,
+      id: "preLoad",
       name: "Rick Sanchez",
       status: "Alive",
       species: "Human",
@@ -24,11 +24,22 @@ let rickOne = {
   ],
 };
 
+let rickLink = "https://rickandmortyapi.com/api/character/";
+
 function App() {
+  const nextHandler = (event) => {
+    event.preventDefault();
+    rickLink = rickObj.info.next;
+  };
+
+  const lastHandler = (event) => {
+    event.preventDefault();
+  };
+
   const [rickObj, setRickObj] = useState(rickOne);
 
   const fetchData = () => {
-    fetch("https://rickandmortyapi.com/api/character/")
+    fetch(rickLink)
       .then((response) => {
         return response.json();
       })
@@ -38,7 +49,7 @@ function App() {
       }, [])
       .then(console.log("nope"));
   };
-  if (rickObj.results.length === 1) {
+  if (rickObj.results[0].id === "preLoad") {
     fetchData();
   }
   return (
@@ -57,8 +68,8 @@ function App() {
           );
         })}
       </div>
-      <button>last page</button>
-      <button>next page</button>
+      <button onClick={lastHandler}>last page</button>
+      <button onClick={nextHandler}>next page</button>
     </div>
   );
 }
