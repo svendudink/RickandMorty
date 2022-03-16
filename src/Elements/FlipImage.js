@@ -4,24 +4,59 @@ import "react-bootstrap";
 
 // import Image from "../Images/1.jpeg";
 const FlipImage = (props) => {
-  return (
-    <div>
-      <div className="grid-item">
-        <div className="flip-card">
-          <div className="flip-card-inner">
-            <div className="flip-card-front">
-              <img src={props.image} alt={"Nope"} />
-            </div>
-            <div className="flip-card-back">
-              <h1>Name: {props.name}</h1>
-              <p>status: {props.status}</p>
-              <p>Species:{props.species}</p>
+  // const obj = {
+  //   name: "sven",
+  //   age: 33,
+  // };
+
+  // let { name } = obj;
+  // console.log(name);
+
+  // let { age } = obj;
+  // console.log("age", age);
+
+  if (props.flipLock === false) {
+    return (
+      <div>
+        <div className="singleImage">
+          <div className="flip-card">
+            <div className="flip-card-inner">
+              <div className="flip-card-front">
+                <img src={props.image} alt={"Failed to load"} />
+              </div>
+              <div className="flip-card-back">
+                <h1>Name: {props.name}</h1>
+                <p>status: {props.status}</p>
+                <p>Species:{props.species}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <div className="singleImage">
+          <div className="flip-card">
+            <div className="flip-card-inner">
+              <div className="flip-card-front">
+                <img src={props.image} alt={"Failed to load"} />
+              </div>
+              <div className="flip-card-back">
+                <h1>Secret</h1>
+                <p>status: {props.status}</p>
+                <p>Species:{props.species}</p>
+                <button id={props.index} onClick={props.winnerClick}>
+                  Your choice
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default FlipImage;
