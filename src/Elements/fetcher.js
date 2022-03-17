@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import GameLogic from "./GameLogic";
 import FlipImage from "./FlipImage";
+import HighScore from "./HighScore";
 
 // let rickLink = "https://rickandmortyapi.com/api/character/";
 // let rickOne = {
@@ -39,39 +40,20 @@ function Fetcher(props) {
     }
 
     let randomArr = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 15; i++) {
       randomArr.push(getRandomInt(825));
-    }
-    console.log(randomArr);
-    console.log(shuffle(randomArr));
-    function shuffle(array) {
-      let currentIndex = array.length,
-        randomIndex;
-      // eslint-disable-next-line eqeqeq
-      while (currentIndex != 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-        ];
-      }
-
-      return array;
     }
 
     setRandomChar(randomArr.indexOf(randomArr[getRandomInt(randomArr.length)]));
 
-    console.log("randomArr", randomArr);
     setRickLink(
       `https://rickandmortyapi.com/api/character/${randomArr.toString()}`
     );
   };
-  // console.log(randomChar);
+
   //end of gamelogic
 
   const nextHandler = (event) => {
-    console.log(rickObj.info.next);
     setRickLink(rickObj.info.next);
     // fetchData();
   };
@@ -82,19 +64,16 @@ function Fetcher(props) {
   };
 
   const searchButtonHandler = (link) => {
-    console.log(link);
     setRickLink(link);
     // fetchData();
   };
 
   // Game Logic, move later to other place when figured out howto pass data to children
   let gameOn = false;
-  let gameArr = [];
 
   const loadAllImagesHandler = () => {
-    console.log("Gamelogic");
     gameOn = true;
-    console.log(gameOn);
+
     fetchData();
   };
 
@@ -105,6 +84,14 @@ function Fetcher(props) {
   const [rickLink, setRickLink] = useState(
     "https://rickandmortyapi.com/api/character/"
   );
+
+  const finishGameHandler = (event) => {
+    setFlipLock(false);
+    gameOn = false;
+    setRickLink("https://rickandmortyapi.com/api/character/");
+    setWinnerScore(0);
+  };
+
   const fetchData = () => {
     fetch(rickLink)
       .then((response) => {
@@ -116,12 +103,9 @@ function Fetcher(props) {
           directArr.results = [...data];
 
           setRickObj(directArr);
-          console.log(data);
-          console.log(directArr);
+
           setFindName(`${directArr.results[randomChar].name}`);
         } else if (gameOn === false) {
-          console.log(data);
-
           setRickObj(data);
         }
         // else {
@@ -131,27 +115,58 @@ function Fetcher(props) {
         //   console.log(gameArr);
         // }
       }, [])
-      .then(console.log("nope"));
+      .then();
   };
   // if (flipLock === true) {
   //   console.log(rickObj.results[randomChar]);
   // }
 
   const [winnerClick, setWinnerClick] = useState();
+  const [winnerScore, setWinnerScore] = useState(0);
 
+  let childArr;
   const passUpstream = (childData) => {
-    const childArr = [childData];
-    console.log(childArr);
+    childArr = [childData];
+    if (flipLock === false) {
+      childArr[0].gamemode = false;
+    } else if (childArr[0].playerWon === true) {
+      playGameHandler();
+      setWinnerClick(undefined);
+      childArr[0].playerWon = false;
+
+      setWinnerScore(childArr[0].score);
+    } else {
+      playGameHandler();
+      setWinnerClick(undefined);
+      childArr[0].playerWon = false;
+      setWinnerScore(0);
+    }
   };
 
-  if (winnerClick !== undefined) console.log(winnerClick.target.id);
+  props.lastPass(winnerScore);
 
   useEffect(() => {
-    console.log("triggered");
     // if (rickObj.results[0].id === "preLoad") {
     fetchData();
     // }
   }, [rickLink]);
+
+  const [selectPageHandler, setSelectPageHandler] = useState("main");
+
+  const highScoreButton = () => {
+    setSelectPageHandler("highScore");
+  };
+
+  const [buildUserData, setBuildUserData] = useState();
+  let userData;
+  const onUserData = (data) => {
+    userData = data;
+  };
+  useEffect(() => {
+    setBuildUserData(userData);
+  }, [userData]);
+
+  console.log(buildUserData);
 
   return (
     <div>
@@ -161,18 +176,29 @@ function Fetcher(props) {
         searchButton={searchButtonHandler}
         everyImage={loadAllImagesHandler}
         play={playGameHandler}
+        gameScore={winnerScore}
+        flipLock={flipLock}
+        finish={finishGameHandler}
+        highScoreButton={highScoreButton}
+        onUserData={onUserData}
       />
 
       <div className="flex-Container">
-        <GameLogic
-          findName={findName}
-          clickedID={
-            winnerClick !== undefined ? winnerClick.target.id : undefined
-          }
-          winnerID={randomChar}
-          passUpstream={passUpstream}
-        />
-        {rickObj ? (
+        {selectPageHandler === "main" && (
+          <GameLogic
+            findName={findName}
+            clickedID={
+              winnerClick !== undefined ? winnerClick.target.id : undefined
+            }
+            winnerID={randomChar}
+            passUpstream={passUpstream}
+            flipLock={flipLock}
+          />
+        )}
+        {selectPageHandler === "highScore" && (
+          <HighScore winnerScore={winnerScore} userData={buildUserData} />
+        )}
+        {selectPageHandler === "main" && rickObj ? (
           rickObj.results.map((js, index) => {
             return (
               <FlipImage
@@ -188,7 +214,7 @@ function Fetcher(props) {
             );
           })
         ) : (
-          <p>loading</p>
+          <p></p>
         )}
       </div>
     </div>

@@ -3,32 +3,42 @@ import { useEffect, useState } from "react";
 
 function GameLogic(props) {
   const [messageWindow, setMessageWindow] = useState();
-  const [playerState, setPlayerState] = useState(undefined);
+  const [playerState, setPlayerState] = useState(true);
+  const [playerScore, setPlayerScore] = useState(0);
+
+  const gameStats = {
+    playerWon: playerState,
+    score: playerScore,
+    gamemode: false,
+  };
 
   useEffect(() => {
-    if (props.clickedID === undefined) {
+    if (props.flipLock === false) {
+      gameStats.gamemode = false;
+      setMessageWindow("");
+    } else if (props.clickedID === undefined) {
       setMessageWindow(props.findName);
     } else if (props.winnerID.toString() === props.clickedID) {
       setMessageWindow("you won");
       setPlayerState(true);
+      setPlayerScore(playerScore + 1);
     } else {
-      setMessageWindow("You lost");
-      setPlayerState(false);
+      setMessageWindow("You lost the game");
+      setTimeout(() => {
+        setPlayerState(false);
+        setPlayerScore(0);
+      }, 2000);
+
+      //props.passUpstream(gameStats);
     }
-  }, [props.findName, props.clickedID]);
+  }, [props.findName, props.clickedID, props.flipLock]);
+
+  useEffect(() => {
+    props.passUpstream(gameStats);
+  }, [playerScore]);
 
   // Passing the data upstream
-  const gameStats = {
-    playerWon: playerState,
-    score: 0,
-  };
 
-  props.passUpstream(gameStats);
-
-  if (props.clickedID === undefined)
-    console.log(props.findName, props.winnerID, props.clickedID);
-
-  useEffect(() => {}, []);
   //props.winnerID === props.clickedID ? !
   return (
     <div>

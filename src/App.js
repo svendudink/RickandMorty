@@ -6,10 +6,13 @@ import "react-bootstrap";
 import Fetcher from "./Elements/Fetcher";
 
 function App(props) {
-  console.log(props.lastPageHandler);
+  const lastPass = (score) => {
+    console.log(score);
+  };
+
   return (
     <div>
-      <Fetcher />
+      <Fetcher lastPass={lastPass} />
     </div>
   );
 }

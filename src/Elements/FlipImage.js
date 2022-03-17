@@ -43,13 +43,14 @@ const FlipImage = (props) => {
               <div className="flip-card-front">
                 <img src={props.image} alt={"Failed to load"} />
               </div>
-              <div className="flip-card-back">
+              <div
+                id={props.index}
+                onClick={props.winnerClick}
+                className="flip-card-back"
+              >
                 <h1>Secret</h1>
                 <p>status: {props.status}</p>
                 <p>Species:{props.species}</p>
-                <button id={props.index} onClick={props.winnerClick}>
-                  Your choice
-                </button>
               </div>
             </div>
           </div>
