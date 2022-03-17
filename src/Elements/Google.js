@@ -1,18 +1,9 @@
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  Form,
-  FormControl,
-  Button,
-} from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -35,6 +26,8 @@ function Google(props) {
   const [userName, setUserName] = useState();
 
   const app = initializeApp(firebaseConfig);
+
+  console.log(app);
 
   function isUserSignedIn() {
     return !!getAuth().currentUser;

@@ -149,6 +149,7 @@ function Fetcher(props) {
     // if (rickObj.results[0].id === "preLoad") {
     fetchData();
     // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rickLink]);
 
   const [selectPageHandler, setSelectPageHandler] = useState("main");

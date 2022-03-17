@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Google from "./Google";
 import {
   Navbar,
   Container,
   Nav,
-  NavDropdown,
   Form,
   FormControl,
   Button,
@@ -12,15 +11,6 @@ import {
 
 function NavBar(props) {
   const [searchField, setSearchField] = useState();
-
-  // const [winningScore, setWinningScore] = useState(0);
-
-  // useEffect(() => {
-  //   setWinningScore(props.winnerScore);
-  // }, [props.winnerScore]);
-
-  // console.log(props.winnerScore);
-  // console.log(winningScore);
 
   let nonGameElements;
   if (props.flipLock === true) {
@@ -53,11 +43,6 @@ function NavBar(props) {
     event.preventDefault();
     const searchURL = `https://rickandmortyapi.com/api/character/?name=${searchField}`;
     props.searchButton(searchURL);
-  };
-
-  const everyImageButtonHandler = (event) => {
-    event.preventDefault();
-    props.everyImage();
   };
 
   const onUserData = (data) => {
